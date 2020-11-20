@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Books</title>
+    <style>
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+        table {
+            border-collapse: collapse;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <a href="index.html">Add a book to database</a>
+    <hr>
+
+    <h3>Books</h3>
+    <table id="book-table">
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Publisher</th>
+            <th>Year Published</th>
+            <th>ISBN</th>
+        </tr>
+    </table>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "http://localhost:1234/api/books",
+                type: "get",
+                success: function(response) {
+                    if (response.status === 'success') {
+                        var table = document.getElementById('book-table');
+                        for (var i = 0; i < response.books.length; ++i) {
+                            var book = response.books[i];
+                            var row = table.insertRow();
+                            
+                            var cell = row.insertCell();
+                            cell.textContent = book.title;
+
+                            cell = row.insertCell();
+                            cell.textContent = book.author;
+
+                            cell = row.insertCell();
+                            cell.textContent = book.publisher;
+
+                            cell = row.insertCell();
+                            cell.textContent = book.year;
+
+                            cell = row.insertCell();
+                            cell.textContent = book.isbn;
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    console.log('error: ' + xhr);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
